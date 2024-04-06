@@ -78,3 +78,28 @@ document.addEventListener('DOMContentLoaded', function() {
   populateSection('series', fetchTrendingSeries);
   populateSection('recommended', fetchRecommendedContent);
 });
+
+const searchForm = document.getElementById('search-form');
+const searchInput = document.getElementById('search-input');
+const searchResults = document.getElementById('search-results');
+
+searchForm.addEventListener('submit', function(event) {
+  event.preventDefault();
+  const query = searchInput.value.toLowerCase();
+  const filteredMovies = movies.filter(movie => movie.title.toLowerCase().includes(query));
+  const filteredSeries = series.filter(serie => serie.title.toLowerCase().includes(query));
+  displaySearchResults(filteredMovies.concat(filteredSeries));
+});
+
+function displaySearchResults(results) {
+  searchResults.innerHTML = '';
+  if (results.length === 0) {
+    searchResults.textContent = 'No results found.';
+    return;
+  }
+  results.forEach(result => {
+    const resultElement = document.createElement('div');
+    resultElement.textContent = `${result.title} (${result.genre})`;
+    searchResults.appendChild(resultElement);
+  });
+}
